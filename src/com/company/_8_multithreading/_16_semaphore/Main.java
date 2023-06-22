@@ -23,7 +23,7 @@ public class Main {
         t5.start();
         t6.start();
 
-        Collections.syn
+//        Collections.syn
     }
 
 }
