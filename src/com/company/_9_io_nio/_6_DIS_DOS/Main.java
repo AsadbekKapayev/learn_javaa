@@ -1,6 +1,8 @@
 package com.company._9_io_nio._6_DIS_DOS;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class Main {
 
