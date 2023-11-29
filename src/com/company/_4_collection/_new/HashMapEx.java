@@ -8,9 +8,14 @@ public class HashMapEx {
   public static void main(String[] args) {
     HashMap<String, String> hashMap = new HashMap<>();
 
-    hashMap.put("akMxQs3M1w", "value");
+    hashMap.put("3", "3");
+    hashMap.put("2", "2");
+    hashMap.put("1", "1");
 
-    System.out.println(hashMap);
+    for (var entry : hashMap.entrySet()) {
+      System.out.println("key : " + entry.getKey() + ", value : " + entry.getValue());
+    }
+
   }
   //endregion
 
