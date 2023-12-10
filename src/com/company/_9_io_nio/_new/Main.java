@@ -1,6 +1,8 @@
 package com.company._9_io_nio._new;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
@@ -190,16 +192,18 @@ public class Main {
         //endregion
 
         //region ByteArrayInputStream
-        var byteArray = loremIpsum.getBytes(StandardCharsets.UTF_8);
+        {
+            var byteArray = loremIpsum.getBytes(StandardCharsets.UTF_8);
 
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
 
-        int value;
+            int value;
 
-        while ((value = byteArrayInputStream.read()) != -1) {
+            while ((value = byteArrayInputStream.read()) != -1) {
 
-            System.out.print((char) value);
+                System.out.print((char) value);
 
+            }
         }
 
         System.out.println("\nByteArrayOutputStream and ByteArrayInputStream\n");
@@ -278,6 +282,68 @@ public class Main {
         }
 
         System.out.println("\nObjectOutputStream and ObjectInputStream\n");
+        //endregion
+
+        //region RandomAccessFile
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile("test.txt", "rw")) {
+
+            randomAccessFile.write((loremIpsum + "raf").getBytes(StandardCharsets.UTF_8));
+
+            int value;
+
+            randomAccessFile.seek(0);
+
+            while ((value = randomAccessFile.read()) != -1) {
+                System.out.print(((char) value));
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("\nRandomAccessFile\n");
+        //endregion
+
+        //region FileChannel write
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile("test.txt", "rw"); FileChannel channel = randomAccessFile.getChannel()) {
+
+            ByteBuffer buffer = ByteBuffer.allocate(loremIpsum.length());
+            buffer.put(loremIpsum.getBytes());
+            buffer.flip();
+            channel.write(buffer);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //endregion
+
+        //region FileChannel read
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile("test.txt", "rw"); FileChannel channel = randomAccessFile.getChannel()) {
+
+            ByteBuffer byteBuffer = ByteBuffer.allocate(24);
+            int byteRead = channel.read(byteBuffer);
+
+            while (byteRead > 0) {
+
+                byteBuffer.flip();
+                byteBuffer.compact()
+
+                while (byteBuffer.hasRemaining()) {
+                    System.out.print((char) byteBuffer.get());
+                }
+
+                byteBuffer.clear();
+                byteRead = channel.read(byteBuffer);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("\nChannel read\n");
+        //endregion
+
+        //region FileChannel other methods
         //endregion
 
     }
