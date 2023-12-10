@@ -4,7 +4,13 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class Main {
 
@@ -326,7 +332,6 @@ public class Main {
             while (byteRead > 0) {
 
                 byteBuffer.flip();
-                byteBuffer.compact()
 
                 while (byteBuffer.hasRemaining()) {
                     System.out.print((char) byteBuffer.get());
@@ -343,9 +348,53 @@ public class Main {
         System.out.println("\nChannel read\n");
         //endregion
 
-        //region FileChannel other methods
+        //region Path
+        {
+            Path path = Paths.get("C:\\Users\\asadb\\IdeaProjects\\learn_javaa\\test.txt");
+
+            Path fileName = path.getFileName();
+            System.out.println("fileName :: " + fileName);
+
+            Path parent = path.getParent();
+            System.out.println("parent :: " + parent);
+
+            Path root = path.getRoot();
+            System.out.println("root :: " + root);
+
+            System.out.println("path.endsWith(\"test.txt\") :: " + path.endsWith("test.txt"));
+            System.out.println("path.endsWith(\"learn_javaa\\\\test.txt\") :: " + path.endsWith("learn_javaa\\test.txt"));
+
+            System.out.println("path.isAbsolute() :: " + path.isAbsolute());
+
+            path = Paths.get("C:\\Users\\asadb\\IdeaProjects\\..\\IdeaProjects\\learn_javaa\\test.txt");
+
+            System.out.println("path.normalize() :: " + path.normalize());
+        }
+
+        System.out.println("\nPath\n");
         //endregion
 
+        //region Files
+        {
+            try {
+                Path file = Files.createFile(Paths.get("createTest.txt"));
+                System.out.println("File created? " + Files.exists(file));
+
+                Path dir = Files.createDirectory(Paths.get("createDir"));
+                System.out.println("dir created? " + Files.exists(dir));
+
+                Path copy = Files.copy(file, Paths.get("createDir/copy.txt"));
+                Path move = Files.move(file, Paths.get("createDir/createTest.txt"), REPLACE_EXISTING);
+
+                Files.delete(copy);
+                Files.delete(move);
+                Files.delete(dir);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //endregion
     }
 
 }
