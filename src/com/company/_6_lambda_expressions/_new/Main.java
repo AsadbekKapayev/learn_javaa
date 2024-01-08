@@ -12,6 +12,8 @@ public class Main {
       System.out.println("predicateValue :: x is more than 0");
     }
 
+    method();
+
     BiPredicate<Integer, Integer> biPredicateValue = (x, y) -> x > y;
     if (biPredicateValue.test(2, 1)) {
       System.out.println("biPredicateValue :: x is more than y");
@@ -129,6 +131,12 @@ public class Main {
     ToDoubleBiFunction<Integer, Integer> toDoubleBiFunction = (x, y) -> (double) x + y;
     System.out.println("x: " + toDoubleBiFunction.applyAsDouble(1, 2));
     //endregion
+  }
+
+  public static void method() {
+    int var = 0;
+
+    int var2  = 1;
   }
 
 }
