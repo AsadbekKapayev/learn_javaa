@@ -2,10 +2,7 @@ package grokking_algorithms.chapter_1;
 
 import util.RND;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -105,12 +102,41 @@ public class Main {
     }
     //endregion
 
-    //region
+    //region quicksort
     {
-      System.out.println(quicksort(List.of(3, 5, 1, 2, 6, 8, 3)));
+      System.out.println(quicksort(List.of(3, 5, 1, 2, 6, 8, 3, 3, 5, 1, 2, 6, 8, 3, 3, 5, 1, 2, 6, 8, 3)));
     }
     //endregion
 
+    //region breadthFirstSearch
+    {
+      var map = Map.of(1, List.of(1, 5, 3), 3, List.of(1, 5, 7), 5, List.of(1, 3, 7), 7, List.of(1, 3, 5));
+      System.out.println(breadthFirstSearch(3, 7, map));
+    }
+    //endregion
+
+  }
+
+  public static int breadthFirstSearch(Integer start, Integer end, Map<Integer, List<Integer>> graph) {
+    var queue = new LinkedList<>(graph.get(start));
+    var searched = new ArrayList<Integer>();
+
+    while (!queue.isEmpty()) {
+      var value = queue.pop();
+
+      if (!searched.contains(value)) {
+
+        if (Objects.equals(value, end)) {
+          return end;
+        } else {
+          queue.addAll(graph.get(value));
+          searched.add(value);
+        }
+
+      }
+    }
+
+    return -1;
   }
 
   public static List<Integer> quicksort(List<Integer> array) {
@@ -132,7 +158,7 @@ public class Main {
       intRight.add(array.get(i));
     }
 
-    return Stream.concat(Stream.concat(intLeft.stream(), Stream.of(op)), intRight.stream())
+    return Stream.concat(Stream.concat(quicksort(intLeft).stream(), Stream.of(op)), quicksort(intRight).stream())
             .collect(Collectors.toList());
   }
 
