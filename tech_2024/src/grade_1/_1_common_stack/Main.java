@@ -1,4 +1,4 @@
-package grade_1.common_stack;
+package grade_1._1_common_stack;
 
 public class Main {
 
